@@ -372,6 +372,10 @@ def load_stats_team_tendencies_offense():
     offense_inputs = offense_inputs.merge(team_targets_seasons, left_index=True, right_index=True, how='left')
     offense_inputs = offense_inputs.merge(team_rushing_seasons, left_index=True, right_index=True, how='left')
 
+    # Numeric cols
+    for col in offense_inputs.columns:
+        offense_inputs[col] = pd.to_numeric(offense_inputs[col])
+
     # print(offense_inputs.shape)
     # print(offense_inputs.head().to_string())
 

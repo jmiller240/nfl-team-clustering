@@ -1,0 +1,26 @@
+
+
+
+Correlations
+------------
+
+Strong correlation between neutral down and normal
+    - Under center vs shotgun usage rates
+    - Pass rates
+
+    - Ignoring neutral downs
+
+
+Under center rate and shotgun pass rate are strong positive correlation
+    - Shotgun rate and shotgun pass rate are strong ~negative~ correlation
+
+    - Makes sense; the more you use shotgun, the more you probably run from it
+    - Whereas, the more you use under center, the more you probably run from it, meaning the more you pass when using shotgun
+
+
+Variance
+--------
+
+Plays / Game (i.e., pace) has most variance
+
+

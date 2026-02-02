@@ -192,16 +192,17 @@ def load_pbp_participation_data() -> pd.DataFrame:
         DefensePositionsStr=pl.col('defense_personnel').map_elements(clean_personnel, return_dtype=str),
     )
     participation = participation.with_columns(
-        OffensePersonnelGroup=pl.col('OffensePositionsStr').map_elements(offensive_personnel, return_dtype=str),
-        DefensePersonnelGroup=pl.col('DefensePositionsStr').map_elements(defensive_personnel, return_dtype=str),
+        OffensePersonnel=pl.col('OffensePositionsStr').map_elements(offensive_personnel, return_dtype=str),
+        DefensePersonnel=pl.col('DefensePositionsStr').map_elements(defensive_personnel, return_dtype=str),
     )
     participation = participation.with_columns(
-        OffenseMultRBs=pl.when(pl.col('OffensePersonnelGroup').str.slice(0, 1).is_in(['2', '3', '4'])).then(1).otherwise(0),
-        OffenseZeroRBs=pl.when(pl.col('OffensePersonnelGroup').str.slice(0, 1) == '0').then(1).otherwise(0),
-        OffenseMultTEs=pl.when(pl.col('OffensePersonnelGroup').str.slice(1, 1).is_in(['2', '3', '4'])).then(1).otherwise(0),
-        OffenseZeroTEs=pl.when(pl.col('OffensePersonnelGroup').str.slice(1, 1) == '0').then(1).otherwise(0),
-        OffenseExtraOL=pl.when(pl.col('OffensePersonnelGroup').str.tail(1) == '*').then(1).otherwise(0),
-        DefensePersonnelType=pl.col('DefensePersonnelGroup').str.split(' ').list.get(0)
+        OffensePersonnelGroup=pl.when(pl.col('OffensePersonnel').str.slice(0, 2).is_in(['11', '12', '13', '21', '22'])).then(pl.col('OffensePersonnel').str.slice(0, 2)).otherwise(pl.lit('Other')),
+        OffenseMultRBs=pl.when(pl.col('OffensePersonnel').str.slice(0, 1).is_in(['2', '3', '4'])).then(1).otherwise(0),
+        OffenseZeroRBs=pl.when(pl.col('OffensePersonnel').str.slice(0, 1) == '0').then(1).otherwise(0),
+        OffenseMultTEs=pl.when(pl.col('OffensePersonnel').str.slice(1, 1).is_in(['2', '3', '4'])).then(1).otherwise(0),
+        OffenseZeroTEs=pl.when(pl.col('OffensePersonnel').str.slice(1, 1) == '0').then(1).otherwise(0),
+        OffenseExtraOL=pl.when(pl.col('OffensePersonnel').str.tail(1) == '*').then(1).otherwise(0),
+        DefensePersonnelType=pl.col('DefensePersonnel').str.split(' ').list.get(0)
     )
 
     # print(participation.shape)
@@ -211,8 +212,8 @@ def load_pbp_participation_data() -> pd.DataFrame:
 
     ''' Combine '''
 
-    participation_cols = ['MasterPlayID', 'OffenseFormation', 'OffensePersonnelGroup', 'OffenseMultRBs', 'OffenseZeroRBs', 'OffenseMultTEs', 'OffenseZeroTEs', 
-                          'OffenseExtraOL', 'time_to_throw', 'DefensePersonnelGroup', 'DefensePersonnelType', 'LightBox', 'HeavyBox', 'number_of_pass_rushers', 
+    participation_cols = ['MasterPlayID', 'OffenseFormation', 'OffensePersonnel','OffensePersonnelGroup', 'OffenseMultRBs', 'OffenseZeroRBs', 'OffenseMultTEs', 'OffenseZeroTEs', 
+                          'OffenseExtraOL', 'time_to_throw', 'DefensePersonnel', 'DefensePersonnelType', 'LightBox', 'HeavyBox', 'number_of_pass_rushers', 
                           'ZoneCoverage', 'ManCoverage', 'defense_coverage_type', 'DefenseCoverage']
     pbp = pbp.join(participation[participation_cols], on='MasterPlayID', how='left')
 
@@ -261,7 +262,7 @@ def load_stats_team_tendencies_offense():
         Rush_Outside=('rush', lambda x: x[pbp_df['RunLocation'] == 'Outside'].sum()),
 
         # Personnel
-        Plays_11_Personnel=('posteam', lambda x: x[pbp_df['OffensePersonnelGroup'] == '11'].shape[0]),
+        Plays_11_Personnel=('posteam', lambda x: x[pbp_df['OffensePersonnel'] == '11'].shape[0]),
         Plays_Mult_RBs=('OffenseMultRBs', 'sum'),
         Plays_Zero_RBs=('OffenseZeroRBs', 'sum'),
         Plays_Mult_TEs=('OffenseMultTEs', 'sum'),

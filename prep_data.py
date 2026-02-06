@@ -154,9 +154,9 @@ def load_pbp_participation_data() -> pd.DataFrame:
 
     # Filter to normal game state
     pbp = pbp.filter(
-        # (pl.col('qtr') <= 3),
-        # (pl.col('half_seconds_remaining') > 120),
-        # (pl.col('score_differential') <= 14),
+        (pl.col('qtr') <= 3),
+        (pl.col('half_seconds_remaining') > 120),
+        (pl.col('score_differential') <= 14),
         (pl.col('special_teams_play') == 0),
         (pl.col('play_type_nfl') != 'PAT2'),
         (pl.col('play_type_nfl') != 'UNSPECIFIED'),     # Unspecified seems to be mostly punt / FG formation plays where something weird happened (fake, fumble, botched snap, etc)
@@ -204,6 +204,9 @@ def load_pbp_participation_data() -> pd.DataFrame:
         OffenseExtraOL=pl.when(pl.col('OffensePersonnel').str.tail(1) == '*').then(1).otherwise(0),
         DefensePersonnelType=pl.col('DefensePersonnel').str.split(' ').list.get(0)
     )
+    participation = participation.with_columns(
+        OffenseHeavyPersonnel=pl.when((pl.col('OffenseMultRBs') == 1) | (pl.col('OffenseMultTEs') == 1)).then(1).otherwise(0),
+    )
 
     # print(participation.shape)
     # print(participation['MasterPlayID'].n_unique())
@@ -213,7 +216,7 @@ def load_pbp_participation_data() -> pd.DataFrame:
     ''' Combine '''
 
     participation_cols = ['MasterPlayID', 'OffenseFormation', 'OffensePersonnel','OffensePersonnelGroup', 'OffenseMultRBs', 'OffenseZeroRBs', 'OffenseMultTEs', 'OffenseZeroTEs', 
-                          'OffenseExtraOL', 'time_to_throw', 'DefensePersonnel', 'DefensePersonnelType', 'LightBox', 'HeavyBox', 'number_of_pass_rushers', 
+                          'OffenseExtraOL', 'OffenseHeavyPersonnel', 'time_to_throw', 'DefensePersonnel', 'DefensePersonnelType', 'LightBox', 'HeavyBox', 'number_of_pass_rushers', 
                           'ZoneCoverage', 'ManCoverage', 'defense_coverage_type', 'DefenseCoverage']
     pbp = pbp.join(participation[participation_cols], on='MasterPlayID', how='left')
 
@@ -263,6 +266,7 @@ def load_stats_team_tendencies_offense():
 
         # Personnel
         Plays_11_Personnel=('posteam', lambda x: x[pbp_df['OffensePersonnel'] == '11'].shape[0]),
+        Plays_Heavy_Personnel=('OffenseHeavyPersonnel', 'sum'),
         Plays_Mult_RBs=('OffenseMultRBs', 'sum'),
         Plays_Zero_RBs=('OffenseZeroRBs', 'sum'),
         Plays_Mult_TEs=('OffenseMultTEs', 'sum'),
@@ -293,9 +297,9 @@ def load_stats_team_tendencies_offense():
     offense_team_tendencies['% Rush Outside'] = offense_team_tendencies['Rush_Outside'] / offense_team_tendencies['Rush_Plays']
 
     # Personnel
-    for col in ['Plays_11_Personnel', 'Plays_Mult_RBs', 'Plays_Zero_RBs', 'Plays_Mult_TEs', 'Plays_Zero_TEs', 'Plays_Extra_OL']:
+    for col in ['Plays_11_Personnel', 'Plays_Heavy_Personnel', 'Plays_Mult_RBs', 'Plays_Zero_RBs', 'Plays_Mult_TEs', 'Plays_Zero_TEs', 'Plays_Extra_OL']:
         cat = col.replace('Plays_', '').replace('_', ' ')
-        col_name = f'% Plays {col}'
+        col_name = f'% Plays {cat}'
         offense_team_tendencies[col_name] = offense_team_tendencies[col] / offense_team_tendencies['Plays']
 
     # Formations

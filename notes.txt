@@ -24,3 +24,22 @@ Variance
 Plays / Game (i.e., pace) has most variance
 
 
+
+Visualization (Dimension Reduction)
+--------
+
+PCA:
+Appears "non-flat" looking at 3D graph of top 3 PCA components
+    - Top 3 components explains 39% variance
+
+Appears spherical to me
+
+t-SNE:
+Very much spherical!
+
+
+Clustering Algorithms
+---------------------
+
+Interested in HDBSCAN and OPTICS for the variable density aspects
+

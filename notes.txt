@@ -1,5 +1,18 @@
 
 
+Lessons
+-------
+
+t-SNE is very useful visualization tool
+    - Determine shape of data (linear, non-linear, etc.) in exploratory phase
+    - Visualize high-D results of learning model (e.g., visualize cluster results of high-D dataset)
+
+PCA is useful as visualization tool AND feature selection tool AND even on its own
+    - Perhaps not as useful as t-SNE for visualization, as t-SNE maintains local proximities / relationships
+    - But since it maintains variance and global distances, it can reliably and usefully be used to reduce (and essentially select) features for further modeling
+    - And, you could even try to assign meaning to the new features
+
+
 
 Correlations
 ------------

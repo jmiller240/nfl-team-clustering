@@ -23,7 +23,7 @@ pl.Config.set_tbl_rows(-1)
 
 ''' Parameters / Constants '''
 
-START_YEAR = 2018       # first year of participation data
+START_YEAR = 2016       # first year of participation data
 END_YEAR = 2024
 SEASONS = [i for i in range(START_YEAR, END_YEAR + 1)]
 

@@ -14,6 +14,11 @@ PCA is useful as visualization tool AND feature selection tool AND even on its o
 
 
 
+-------------
+|    EDA    |
+-------------
+
+
 Correlations
 ------------
 
@@ -31,14 +36,23 @@ Under center rate and shotgun pass rate are strong positive correlation
     - Whereas, the more you use under center, the more you probably run from it, meaning the more you pass when using shotgun
 
 
+Distributions
+-------------
+
+Most features look fairly normal...
+
+Remove personnel %s except 11 and maybe heavy, as the rest are so small/sparse and not normally distributed
+
+
 Variance
 --------
 
 Plays / Game (i.e., pace) has most variance
 
+Before scaling, variance is just the features with the largest scales
 
 
-Visualization (Dimension Reduction)
+Visualization
 --------
 
 PCA:
@@ -51,8 +65,29 @@ t-SNE:
 Very much spherical!
 
 
-Clustering Algorithms
+
 ---------------------
+|   Preprocessing   |
+---------------------
+
+
+Most features are fairly normal before scaling, so standarization and normalization produce similar distributions
+    --> Probably the method based on the modeling procedure (aka, standardization usually best for PCA)
+
+
+
+-------------------
+|   PCA Factors   |
+-------------------
+
+
+
+
+
+-------------------
+|   Clustering    |
+-------------------
+
 
 Interested in HDBSCAN and OPTICS for the variable density aspects
 

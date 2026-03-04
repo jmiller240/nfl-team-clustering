@@ -82,6 +82,53 @@ Most features are fairly normal before scaling, so standarization and normalizat
 
 
 
+-----------------------
+|  Feature Selection  |
+-----------------------
+
+Ignore neutral downs
+
+Pace: going to keep both drives per game and plays per game
+    --> if could choose one, keep drives per game...
+        --> better teams run more plays
+        --> some offenses run more plays because they're slower / more methodical, which is a trait but doesn't really capture pace
+
+        --> however, defensive strength + opposing offense strength/play style definitely affects drives per game... idk
+
+Personnel: keep only % 11 personnel
+    --> 93% correlation with heavy personnel
+    --> basically same variance
+    --> 11 is centered around like 55%, heavy like 45%
+    --> 11 is very specific trait (spread, rpo type offenses), so go with that
+    
+    --> other %s are too sparse and don't add much
+
+Formation: keep % under center
+    --> shotgun is higher % league wide, so higher under center usage is more unique
+
+Pass Rate: keep % pass under center and % pass shotgun, not % pass
+    --> less intuitive from football perspective...
+    --> but, only 22% correlation between two, and both have higher variance than % pass
+    --> and, % pass is 42 and 32% correlated with them, so it'd be % pass only
+
+Depth of Target: 
+    --> ADOT and ADOT to Sticks are basically the same by variance / spread, 91% correlation
+    --> ADOT to sticks would almost more intuitive, but it's spread under 0, so not really
+
+    --> % pass deep and behind LOS not correlated, but are with ADOT
+    --> hmmmmm
+
+TTT: not highly correlated with anything except scrambles (46%), which makes sense
+
+Receiver targets share: decent high variance, no high correlations
+
+Target and Rush attempts share: no high correlations
+    --> rush attempts has more variance, prob. a bit more descriptive of offense
+    --> ie., how split is the backfield
+
+Rush location: keep outside
+    --> 45% correlation with each other, nothing strong with others
+    --> on the fence, but kinda duplicative, and outside is more descriptive to me
 
 
 -------------------
